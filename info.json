@@ -1,0 +1,10 @@
+{
+  "name": "pollution-extention",
+  "version": "0.1",
+  "title": "Pollution Extention (0.17)",
+  "author": "Aialon",
+  "homepage": "",
+  "dependencies": ["base >= 0.17"],
+  "description": "Adds additional pollution-based challenges to the game",
+  "factorio_version": "0.17"
+}
