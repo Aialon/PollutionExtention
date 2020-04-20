@@ -6,11 +6,7 @@
 -------------------------------------------------------------------------------
 
 --ToDO
---Building removed
---Can be done by checking if valid
-
---run every delay ticks
-local delay=60
+--Check normal pollution values
 
 script.on_event(defines.events.on_built_entity,
 	function (event)
@@ -24,14 +20,9 @@ script.on_event(defines.events.on_robot_built_entity,
 	end
 )
 
-script.on_event({defines.events.on_tick},
-	function(event)
-	local tick = event.tick
-	--prevent lag by processing every delay ticks
-	if tick % delay == 0 then
-		pollutionAirEffects(event)
-		pollutionRadiationEffects(event)
-		end
+script.on_nth_tick(60,function(event)
+	pollutionAirEffects(event)
+	pollutionRadiationEffects(event)
 	end
 )
 
@@ -43,10 +34,7 @@ function saveBuildings(entity)
 		if global.radiators.reactors == nil then
 			global.radiators.reactors = {}
 		end
-		if not global.radiators.reactors[1] then
-			global.radiators.reactors[1] = {}
-		end
-		table.insert(global.radiators.reactors[1], entity)
+		table.insert(global.radiators.reactors, entity)
 	end
 	elseif entity.name == "centrifuge" then
 		if global.radiators == nil then
@@ -55,29 +43,42 @@ function saveBuildings(entity)
 		if global.radiators.centrifuges == nil then
 			global.radiators.centrifuges = {}
 		end
-		if not global.radiators.centrifuges[1] then
-			global.radiators.centrifuges[1] = {}
-		end
-		table.insert(global.centrifuges[1], entity)
+		table.insert(global.centrifuges, entity)
 	end
 end
 
 function pollutionAirEffects(event)
-	--iterate all chunks
-		--remove x% of smog 
+	for k, surf in pairs(game.surfaces) do
+	--remove x% of smog 
+		for l, smog in pairs(surf.find_entities_filtered{name="smog"}) do
+			if game.create_random_generator() < 0.2 then
+				smog.destroy
+			end
+		end
+		--iterate all chunks
+		for chunk in surf.get_chunks() do
 		--check pollution value
-			--add smog
-			--randomly landfill
-	--check total pollution
-		--add acid rain
+			if surf.get_pollution(chunk.x,chunk.y)
+	
+				--add smog
+				--randomly landfill
+			end
+		end
+		--check total pollution, 
+		for l=1,surf.get_total_pollution()/100 do
+		surf.get_random_chunk.x*32+game.create_random_generator(-16,16)
+			surf.get_random_chunk.y*32+game.create_random_generator(-16,16)
+			--add acid rain
+		end
+	end
 end
 
 function pollutionRadiationEffects(event)
 	global.radiators ~= nil then
-		for k, reactor in pairs(global.radiators.reactors[1]) do
+		for k, reactor in pairs(global.radiators.reactors) do
 			--spawn a fallout ore in a random location nearby
 		end
-		for k, centrifuge in pairs(global.radiators.centrifuge[1]) do
+		for k, centrifuge in pairs(global.radiators.centrifuge) do
 			--spawn a fallout ore in a random location nearby
 		end
 	end
